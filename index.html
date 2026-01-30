@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IndoUI</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.035) 1px, transparent 1px),
+        radial-gradient(1200px 600px at top right, #eef3ff, transparent 60%),
+        radial-gradient(900px 500px at bottom left, #f6f9ff, transparent 60%),
+        #f9fbff;
+    background-size:40px 40px, 40px 40px, auto, auto;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* workspace canvas */
+.workspace{
+    position:relative;
+    width:760px;
+    height:420px;
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:
+        0 60px 120px rgba(0,0,0,.15),
+        inset 0 0 0 1px rgba(0,0,0,.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* inner design canvas */
+.canvas{
+    position:relative;
+    width:88%;
+    height:70%;
+    border-radius:16px;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
+        #f8fafc;
+    background-size:24px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* subtle floating UI dots */
+.dot{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#2563eb;
+    opacity:.25;
+    box-shadow:0 0 30px #2563eb;
+}
+
+.dot.a{ top:22px; left:26px; }
+.dot.b{ bottom:22px; right:26px; }
+
+/* timer */
+.timer{
+    font-size:2.9rem;
+    font-weight:800;
+    letter-spacing:2px;
+    color:#111827;
+}
+</style>
+</head>
+
+<body>
+
+<div class="workspace">
+    <div class="canvas">
+        <div class="dot a"></div>
+        <div class="dot b"></div>
+
+        <div class="timer" id="timer">0s</div>
+    </div>
+</div>
+
+<script>
+/* 🔒 FIXED GLOBAL START TIME (16:21 IST) */
+const START_TIME = new Date("2026-01-30T10:51:00Z");
+
+function updateTimer(){
+    let diff = Math.floor((Date.now() - START_TIME) / 1000);
+    if(diff < 0) diff = 0;
+
+    const units = [
+        {l:"y", s:31536000},
+        {l:"mo",s:2592000},
+        {l:"d", s:86400},
+        {l:"h", s:3600},
+        {l:"m", s:60},
+        {l:"s", s:1}
+    ];
+
+    let out=[];
+    for(const u of units){
+        const v = Math.floor(diff/u.s);
+        if(v>0){
+            out.push(v+u.l);
+            diff%=u.s;
+        }
+    }
+    timer.textContent = out.length ? out.join(" ") : "0s";
+}
+
+updateTimer();
+setInterval(updateTimer,1000);
+</script>
+
+</body>
+</html>
